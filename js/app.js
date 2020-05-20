@@ -71,5 +71,4 @@ function weatherForcast(data) {
     </div>`)
         }
     })
-
 }
