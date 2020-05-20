@@ -46,23 +46,30 @@ function currentWeather(data) {
 function weatherForcast(data) {
     let date = new Date();
     let dates = {};
+    let tempMax = {};
+    let tempMin = {};
     const forecastEle = document.querySelector(".forecast");
     data.forEach(weather => {
         let date = new Date(weather.dt_txt);
         if (dates[date.toDateString(weather.dt_txt)] === undefined) {
             dates[date.toDateString(weather.dt_txt)] = [weather];
+            tempMax[date.toDateString(weather.dt_txt)] = [weather.main.temp_max];
+            tempMin[date.toDateString(weather.dt_txt)] = [weather.main.temp_min];
         } else {
             dates[date.toDateString(weather.dt_txt)].push(weather);
+            tempMax[date.toDateString(weather.dt_txt)].push(weather.main.temp_max);
+            tempMin[date.toDateString(weather.dt_txt)].push(weather.main.temp_min);
         }
         if (date.toLocaleTimeString() === "12:00:00 PM") {
             forecastEle.insertAdjacentHTML(`beforeend`, `<div class="day">
       <h3>${day[date.getDay()]}</h3>
-      <img src="http://openweathermap.org/img/wn/10d@2x.png" />
-      <div class="description">light rain</div>
+      <img src="http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png">
+      <div class="description">${weather.weather[0].description}</div>
       <div class="temp">
-        <span class="high">9℃</span>/<span class="low">6℃</span>
+        <span class="high">${parseInt(tempMax[date.toDateString(weather.dt_txt)])}&#8451</span>/<span class="low">${parseInt((tempMin[date.toDateString(weather.dt_txt)]))}&#8451</span>
       </div>
     </div>`)
         }
     })
+
 }
