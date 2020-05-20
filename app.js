@@ -27,6 +27,7 @@ function getlocation(lati, long) {
         .then(resp => resp.json())
         .then(data => {
             weatherForcast(data.list);
+
         })
 }
 
@@ -44,9 +45,15 @@ function currentWeather(data) {
 
 function weatherForcast(data) {
     let date = new Date();
+    let dates = {};
     const forecastEle = document.querySelector(".forecast");
     data.forEach(weather => {
         let date = new Date(weather.dt_txt);
+        if (dates[date.toDateString(weather.dt_txt)] === undefined) {
+            dates[date.toDateString(weather.dt_txt)] = [weather];
+        } else {
+            dates[date.toDateString(weather.dt_txt)].push(weather);
+        }
         if (date.toLocaleTimeString() === "12:00:00 PM") {
             forecastEle.insertAdjacentHTML(`beforeend`, `<div class="day">
       <h3>${day[date.getDay()]}</h3>
@@ -58,5 +65,4 @@ function weatherForcast(data) {
     </div>`)
         }
     })
-
 }
